@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
+{% load for_pagination %}
+<!-- {% load event_tag %} -->
 
 {% block content %}
-
+<!-- <h1> {% total_events %}</h1> -->
 <div class="main-search">
     <form method="get" action="{% url 'filter_results' %}">
         <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4">
@@ -58,10 +60,30 @@
                 <a href="{{ car.get_absolute_url }}" class="View-btn">View Detail<i class=" icon-arrow-long-right"></i></a> </div>
         </div>
     </div>
+
     {% endfor %}
     
 
     
+</div>
+
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="{% fixed_pn 1 'page' request.GET.urlencode %}">&laquo; first</a>
+            <a href="{% fixed_pn page_obj.previous_page_number 'page' request.GET.urlencode %}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="{% fixed_pn page_obj.next_page_number 'page' request.GET.urlencode %}">next</a>
+            <a href="{% fixed_pn page_obj.paginator.num_pages 'page' request.GET.urlencode %}">last &raquo;</a>
+        {% endif %}
+    </span>
 </div>
 
 {% endblock content %}
