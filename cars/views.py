@@ -57,3 +57,24 @@ def car_detail(request, car_id):
     }
 
     return render(request, 'car_detail.html', context)
+
+def inventory(request):
+    inventory_cars = Car.objects.all()
+
+    page = request.GET.get('page')
+    paginator = Paginator(inventory_cars, 5)
+    try:
+        inventory_cars = paginator.page(page)
+    except PageNotAnInteger:
+        inventory_cars = paginator.page('1')
+    except EmptyPage:
+        inventory_cars = paginator.page(paginator.num_pages)
+
+    page_obj = paginator.get_page(page)
+
+    context = {
+        'inventory_cars': inventory_cars,
+        'page_obj' : page_obj
+    }
+
+    return render(request, 'inventory.html', context)
